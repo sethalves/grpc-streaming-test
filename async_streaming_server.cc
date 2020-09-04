@@ -72,8 +72,8 @@ private:
             : service_(service)
             , cq_(cq)
             , responder_(&ctx_)
-            , status_(CREATE)
             , times_(0)
+            , status_(CREATE)
         {
             Proceed();
         }
