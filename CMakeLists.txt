@@ -67,25 +67,13 @@ add_custom_command(
         "${hellostreamingworld_proto_file}"
       DEPENDS "${hellostreamingworld_proto_file}")
 
-
-
 set(hellostreamingworld_proto_src_public "${hellostreamingworld_proto_hdrs};${hellostreamingworld_grpc_hdrs}")
 set(hellostreamingworld_proto_src_core "${hellostreamingworld_proto_srcs};${hellostreamingworld_grpc_srcs}")
 
 add_library(protocol_library STATIC ${hellostreamingworld_proto_src_public} ${hellostreamingworld_proto_src_core}) 
-
-setup_memory_debugger()
-
-# help visual studio show the source files in a nice way
-source_group("public" FILES ${hellostreamingworld_proto_src_public})
-source_group("core" FILES ${hellostreamingworld_proto_src_core})
-
 target_include_directories(protocol_library PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_include_directories(protocol_library PUBLIC ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(protocol_library CONAN_PKG::grpc CONAN_PKG::protobuf)
-
-install(TARGETS protocol_library DESTINATION lib)
-install(FILES ${hellostreamingworld_proto_src_public} DESTINATION include)
 
 #####
 ##### server

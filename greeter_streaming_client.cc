@@ -35,15 +35,13 @@ using hellostreamingworld::HelloRequest;
 using hellostreamingworld::HelloReply;
 using hellostreamingworld::MultiGreeter;
 
-class GreeterClient
-{
+class GreeterClient {
 public:
     GreeterClient(std::shared_ptr<Channel> channel)
         : stub_(MultiGreeter::NewStub(channel))
     {}
 
-    void SayHello(const std::string& user, const std::string& num_greetings)
-    {
+    void SayHello(const std::string& user, const std::string& num_greetings) {
         HelloRequest request;
         request.set_name(user);
         request.set_num_greetings(num_greetings);
@@ -51,19 +49,19 @@ public:
         ClientContext context;
         std::unique_ptr<ClientReader<HelloReply>> reader(stub_->sayHello(&context, request));
 
+        int n { 0 };
         HelloReply reply;
-        while (reader->Read(&reply)) 
-        {
-            std::cout << "Got reply: " << reply.message() << std::endl;
+        while (reader->Read(&reply)) {
+            n++;
+            if (n % 1000 == 0) {
+                std::cout << "Got reply: " << reply.message() << std::endl;
+            }
         }
 
         Status status = reader->Finish();
-        if (status.ok()) 
-        {
+        if (status.ok()) {
             std::cout << "sayHello rpc succeeded." << std::endl;
-        } 
-        else 
-        {
+        } else {
             std::cout << "sayHello rpc failed." << std::endl;
             std::cout << status.error_code() << ": " << status.error_message() << std::endl;
         }
@@ -73,8 +71,7 @@ private:
     std::unique_ptr<MultiGreeter::Stub> stub_;
 };
 
-int main(int argc, char** argv)
-{
+int main(int argc, char** argv) {
     GreeterClient greeter(grpc::CreateChannel("localhost:50051", grpc::InsecureChannelCredentials()));
     std::string user("world");
     greeter.SayHello(user, "123");

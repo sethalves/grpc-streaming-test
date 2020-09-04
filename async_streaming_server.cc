@@ -96,7 +96,7 @@ private:
                     new CallData(service_, cq_);
                 }
 
-                if (times_++ >= 3)
+                if (times_++ >= 1000000)
                 {
                     status_ = FINISH;
                     responder_.Finish(Status::OK, this);
